@@ -142,46 +142,74 @@ def quick_sort(nums):
   _quick_sort(nums, 0, len(nums) - 1)
 
 def generateArray(num):
-    rand_range = 1000000
-
+    rand_range = 10000000
     return [random.randint(0, rand_range) for i in range(0, num)]
 
+sortTypes = ['Bubble', 'Selection', 'Insertion', 'Heap', 'Merge', 'Quick', 'Python']
 
-arrayTypes = [
-    generateArray(100),
-    generateArray(1000),
-    generateArray(3000),
-    generateArray(5000),
-    generateArray(7000),
-    generateArray(10000),
-    generateArray(20000),
-    generateArray(50000),
-
-]
-
-avgTime = [[],[],[],[],[],[],[],[]]
-
-for j in range(0,10):
-    for i in range(0,8):
-        timeStart = time.time()
-        heap_sort(generateArray(len(arrayTypes[i])))
-        timeEnd = time.time()
-        avgTime[i].append(round((timeEnd-timeStart),20))
-
-for j in avgTime:
-    print(sum(j)/10)
-
-
-
-
+arrayTypes = [1000,2000,3000,4000,5000,6000,7000]
 
 figure = plt.figure()
-print(figure.axes)
 
-x = [100, 1000, 3000, 5000, 7000, 10000, 20000, 50000]
-y = [0.0005, 0.00788, 0.02613, 0.04603, 0.07201, 0.11106, 0.30012, 0.62281]
-plt.plot(x,y,label='line',color='red')
+plt.ylabel('Среднее время сортировки', color='#611212')
+plt.xlabel('Количество элементов в массиве', color='#611212')
 
-plt.savefig('pic_lab2', format='svg')
+for j in sortTypes:
+    print(f'{j} sort in progress')
+    avgTimeForArrayType = []
+    for k in range(0,len(arrayTypes)):
+        avgTime=0
+        for i in range(0,10):
+            if j=='Bubble':
+                timeStart = time.time()
+                bubble_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                print(timeDiff)
+                avgTime += round(timeDiff,20)
+            if j=='Selection':
+                timeStart = time.time()
+                selection_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff,20)
+            if j=='Insertion':
+                timeStart = time.time()
+                insertion_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff,20)
+            if j == 'Heap':
+                timeStart = time.time()
+                heap_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff, 20)
+            if j == 'Merge':
+                timeStart = time.time()
+                merge_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff, 20)
+            if j == 'Quick':
+                timeStart = time.time()
+                quick_sort(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff, 20)
+            if j == 'Python':
+                timeStart = time.time()
+                sorted(generateArray(arrayTypes[k]))
+                timeEnd = time.time()
+                timeDiff = timeEnd - timeStart
+                avgTime += round(timeDiff, 20)
+        avgTimeForArrayType.append(avgTime)
+    plt.plot(arrayTypes, avgTimeForArrayType, label=f'{j} sort')
+    print(f'Average time for all types of arrays in {j} sort')
+    print(avgTimeForArrayType)
 
+
+plt.savefig('pic_lab2', format='png')
+
+plt.legend()
 plt.show()
